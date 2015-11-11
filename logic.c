@@ -61,3 +61,36 @@ void determinePosY(double * posY, double * velY)
       *posY = BOTTOM_BOUND;
     }
 }
+
+void determineVelX(double * velX, int keycode)
+{ 
+
+  switch(keycode)
+    {
+    case 0x07: // if right key (D) has been pressed
+      if(*velX < 0)
+	*velX *= -1;
+      break;
+    case 0x04: //if left key (A) has been pressed
+      if(*velX > 0)
+        *velX *= -1;
+      break;
+    default: 
+      *velX = 0;
+      break;
+    }
+}
+
+void determinePosX(double * posX, double * velX)
+{
+  /* xf = x0 + at */
+  *posX = *posX + (*velX * TIME_STEP);
+
+  if(*posX < LEFT_BOUND)
+    {
+      posX = LEFT_BOUND;
+    } else if(*posX > RIGHT_BOUND)
+    {
+      *posX = RIGHT_BOUND;
+    }
+}
