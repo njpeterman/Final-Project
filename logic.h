@@ -12,5 +12,8 @@
 
 // insert functions implemented here
 
+void determineVelY(double * velY, int keycode, int canJump, int * impulse_counter);
+void determinePosY(double * posY, double * velY);
+
 
 #endif
