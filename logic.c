@@ -5,15 +5,15 @@
 
 /* ****************************************
  * determineVelY
- * The purpose of this function is to determine the 
- * velocity with given gravity. 
- * 
+ * The purpose of this function is to determine the
+ * velocity with given gravity.
+ *
  * The way we do this is by defining an impulse acceleration,
  * which activates every single time the character tries to jump.
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
  *
  *
  *
@@ -34,15 +34,15 @@ void determineVelY(double * velY, int keycode, int canJump, int * impulse_counte
     }
 
   // here we apply the impulse acceleration if we have previously jumped
-  if(*impulse_counter > 0 && *impulse_counter <= IMPULSE_TIME_LIMIT) 
+  if(*impulse_counter > 0 && *impulse_counter <= IMPULSE_TIME_LIMIT)
     {
       *velY = *velY + (IMPULSE * TIME_STEP);
-      *impulse_counter++;
+      (*impulse_counter)++;
     } else
     { // reset the counter
       *impulse_counter = 0;
-    }  
-  
+    }
+
   /* Vf = Vo - at */
   *velY = *velY - (GRAVITY * TIME_STEP);
 }
@@ -53,29 +53,29 @@ void determinePosY(double * posY, double * velY)
   /* xf = x0 + at */
   *posY = *posY + (*velY * TIME_STEP);
 
-  if(*posY < 0)
+  if(*posY < 0) // if we hit the top of the screen
     {
       posY = 0;
-    } else if(*posY > BOTTOM_BOUND)
+      *velY = 0;
+    } else if(*posY > BOTTOM_BOUND) // if we hit the bottom
     {
       *posY = BOTTOM_BOUND;
+      *velY = 0;
     }
 }
 
 void determineVelX(double * velX, int keycode)
-{ 
+{
 
   switch(keycode)
     {
     case 0x07: // if right key (D) has been pressed
-      if(*velX < 0)
-	*velX *= -1;
+      *velX = HORIZONTAL_VELOCITY;
       break;
     case 0x04: //if left key (A) has been pressed
-      if(*velX > 0)
-        *velX *= -1;
+    	*velX = -1 * HORIZONTAL_VELOCITY;
       break;
-    default: 
+    default:
       *velX = 0;
       break;
     }
@@ -88,9 +88,11 @@ void determinePosX(double * posX, double * velX)
 
   if(*posX < LEFT_BOUND)
     {
-      posX = LEFT_BOUND;
+      *posX = LEFT_BOUND;
+      *velX = 0;
     } else if(*posX > RIGHT_BOUND)
     {
       *posX = RIGHT_BOUND;
+      *velX = 0;
     }
 }
