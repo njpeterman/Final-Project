@@ -8,7 +8,8 @@
 #define TIME_STEP 0.1
 #define RIGHT_BOUND 639
 #define BOTTOM_BOUND 439
-#define LEFT_BOUND 239
+#define LEFT_BOUND 0
+#define HORIZONTAL_VELOCITY 5
 
 // insert functions implemented here
 
