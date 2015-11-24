@@ -42,6 +42,7 @@ int main()
   //return 1;
   
   PNG * outImage = new PNG(640, 480);
+  bool isPlatform[640][480] = {false};
   int r, g, b;
 
   int avg_red[80][60];
@@ -86,6 +87,25 @@ int main()
     }
 
   outImage->writeToFile("out.png");
+
+
+//creates isPlatform that tells us whether a pixel is a wall/obstacle or movable region
+  for(x = 0; x < 640; x++)
+    {
+      for(y = 0; y < 480; y++)
+	{	
+	//177 is 'b1' in hex, and 191 is 'bf' in hex
+	//This is the range of red values that determines a brown wall/obstacle
+	 if( ((int)(*outImage) (x, y)->red) >= 177 &&  ((int)(*outImage) (x, y)->red) <= 191 ){ 
+	   isPlatform[x][y] = true;
+	    //(*testImage) (x, y)->red = 195;
+	 }
+	}
+    }
+  
+  //testImage->writeToFile("test.png");
+
+
 
 
   // now print the case statement in hex like such:
