@@ -12,7 +12,10 @@
 
 #include "image.h"
 #include <iostream>
-#include <iomanip> 
+#include <iomanip>
+#include <string>
+
+using namespace std;
 
 int main()
 {
@@ -30,7 +33,10 @@ int main()
 	delete myImage;*/
 
   PNG * myImage = new PNG();
-  myImage->readFromFile("final.png");
+  string filename;
+  //std::cout << "Enter a file name to read: ";
+  std::getline(cin, filename);
+  myImage->readFromFile(filename);
   //std::cout << myImage->width();
   //std::cout << myImage->height();
   //return 1;
@@ -86,20 +92,16 @@ int main()
   // 8'h00: out <= 8'h63;
 
   int counter = 1;
-  for(x = 0; x < 80; x++)
+  for(y = 0; y < 60; y++)
     {
-      for(y = 0; y < 60; y++)
+      for(x = 0; x < 80; x++)
 	{
-	  std::cout << "16'h" << std::setfill('0') << std::setw(2) << std::hex << x;
-	  std::cout << std::setfill('0') << std::setw(2) << std::hex << y << ": out <= 24'h";
-	  std::cout << std::setfill('0') << std::setw(2) << std::hex << avg_red[x][y];
-	  std::cout << std::setfill('0') << std::setw(2) << std::hex << avg_green[x][y];
-	  std::cout << std::setfill('0') << std::setw(2) << std::hex << avg_blue[x][y] << ";  ";
-	  if(counter % 4 == 0)
-	    {
-	      std::cout << std::endl;
-	    }
-	  counter++;
+	  int pixel = ((avg_red[x][y]/8) << 10) + ((avg_green[x][y]/8) << 5) + (avg_blue[x][y]/8);
+	  
+	  std::cout << std::setfill('0') << std::setw(4) << std::hex << pixel;
+	  //std::cout << std::setfill('0') << std::setw(2) << std::hex << avg_red[x][y];
+	  //std::cout << std::setfill('0') << std::setw(2) << std::hex << avg_green[x][y];
+	  //std::cout << std::setfill('0') << std::setw(2) << std::hex << avg_blue[x][y] << ";  ";
 	}
     }
 
