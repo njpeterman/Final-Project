@@ -32,100 +32,125 @@ int main()
 
 	delete myImage;*/
 
-  PNG * myImage = new PNG();
-  string filename;
-  //std::cout << "Enter a file name to read: ";
-  std::getline(cin, filename);
-  myImage->readFromFile(filename);
-  //std::cout << myImage->width();
-  //std::cout << myImage->height();
-  //return 1;
+
+  int numLevels = 1;
+  for(int i = 0; i < numLevels; i++)
+    {
+      PNG * myImage = new PNG();
+      string filename;
+      //std::cout << "Enter a file name to read: ";
+      std::getline(cin, filename);
+      myImage->readFromFile(filename);
+      //std::cout << myImage->width();
+      //std::cout << myImage->height();
+      //return 1;
   
-  PNG * outImage = new PNG(640, 480);
-  bool isPlatform[640][480] = {false};
-  int r, g, b;
+      PNG * outImage = new PNG(640, 480);
+      bool isPlatform[640][480] = {false};
+      int r, g, b;
 
-  int avg_red[80][60];
-  int avg_green[80][60];
-  int avg_blue[80][60];
+      int avg_red[80][60];
+      int avg_green[80][60];
+      int avg_blue[80][60];
 
-  int x, y, x_block, y_block;
-  // calculate average pixel values
-  for(x = 0; x < 80; x++)
-    {
-      for(y = 0; y < 60; y++)
-	{
-	  r = 0; g = 0; b = 0; 
-	  for(x_block = 8*x; x_block < 8*x + 8; x_block++)
-	    {
-	      for(y_block = 8*y; y_block < (8*y + 8); y_block++)
-		{
-		  //std::cout << "x_block: " << x_block << "y block: " << y_block << std::endl;
-		  r += (*myImage) (x_block, y_block)->red;
-		  g += (*myImage) (x_block, y_block)->green;
-		  b += (*myImage) (x_block, y_block)->blue;
-		}
-	    }
-	  r = (int) r / 64;
-	  g = (int) g / 64;
-	  b = (int) b / 64;
-	  avg_red[x][y] = r;
-	  avg_green[x][y] = g;
-	  avg_blue[x][y] = b;
-	}
-    }
-  
-
-  for(x = 0; x < 640; x++)
-    {
-      for(y = 0; y < 480; y++)
-	{
-	  (*outImage) (x, y)->red = (uint8_t) avg_red[ (int) x/8][ (int) y/8 ];
-	  (*outImage) (x, y)->green = (uint8_t) avg_green[ (int) x/8][ (int) y/8 ];
-	  (*outImage) (x, y)->blue = (uint8_t) avg_blue[ (int) x/8][ (int) y/8 ];
-	}
-    }
-
-  outImage->writeToFile("out.png");
-
-
-//creates isPlatform that tells us whether a pixel is a wall/obstacle or movable region
-  for(x = 0; x < 640; x++)
-    {
-      for(y = 0; y < 480; y++)
-	{	
-	//177 is 'b1' in hex, and 191 is 'bf' in hex
-	//This is the range of red values that determines a brown wall/obstacle
-	 if( ((int)(*outImage) (x, y)->red) >= 177 &&  ((int)(*outImage) (x, y)->red) <= 191 ){ 
-	   isPlatform[x][y] = true;
-	    //(*testImage) (x, y)->red = 195;
-	 }
-	}
-    }
-  
-  //testImage->writeToFile("test.png");
-
-
-
-
-  // now print the case statement in hex like such:
-  // 8'h00: out <= 8'h63;
-
-  int counter = 1;
-  for(y = 0; y < 60; y++)
-    {
+      int x, y, x_block, y_block;
+      // calculate average pixel values
       for(x = 0; x < 80; x++)
 	{
-	  int pixel = ((avg_red[x][y]/8) << 10) + ((avg_green[x][y]/8) << 5) + (avg_blue[x][y]/8);
-	  
-	  std::cout << std::setfill('0') << std::setw(4) << std::hex << pixel;
-	  //std::cout << std::setfill('0') << std::setw(2) << std::hex << avg_red[x][y];
-	  //std::cout << std::setfill('0') << std::setw(2) << std::hex << avg_green[x][y];
-	  //std::cout << std::setfill('0') << std::setw(2) << std::hex << avg_blue[x][y] << ";  ";
+	  for(y = 0; y < 60; y++)
+	    {
+	      r = 0; g = 0; b = 0; 
+	      for(x_block = 8*x; x_block < 8*x + 8; x_block++)
+		{
+		  for(y_block = 8*y; y_block < (8*y + 8); y_block++)
+		    {
+		      //std::cout << "x_block: " << x_block << "y block: " << y_block << std::endl;
+		      r += (*myImage) (x_block, y_block)->red;
+		      g += (*myImage) (x_block, y_block)->green;
+		      b += (*myImage) (x_block, y_block)->blue;
+		    }
+		}
+	      r = (int) r / 64;
+	      g = (int) g / 64;
+	      b = (int) b / 64;
+	      avg_red[x][y] = r;
+	      avg_green[x][y] = g;
+	      avg_blue[x][y] = b;
+	    }
 	}
-    }
-
   
+
+      for(x = 0; x < 640; x++)
+	{
+	  for(y = 0; y < 480; y++)
+	    {
+	      (*outImage) (x, y)->red = (uint8_t) avg_red[ (int) x/8][ (int) y/8 ];
+	      (*outImage) (x, y)->green = (uint8_t) avg_green[ (int) x/8][ (int) y/8 ];
+	      (*outImage) (x, y)->blue = (uint8_t) avg_blue[ (int) x/8][ (int) y/8 ];
+	    }
+	}
+
+      outImage->writeToFile("out.png");
+
+
+      //creates isPlatform that tells us whether a pixel is a wall/obstacle or movable region
+      for(x = 0; x < 640; x++)
+	{
+	  for(y = 0; y < 480; y++)
+	    {	
+	      //177 is 'b1' in hex, and 191 is 'bf' in hex
+	      //This is the range of red values that determines a brown wall/obstacle
+	      if( ((int)(*outImage) (x, y)->red) == 32 ||  ((int)(*outImage) (x, y)->red) == 96 ){ 
+		isPlatform[x][y] = true;
+		//(*testImage) (x, y)->red = 195;
+	      }
+	    }
+	}
+  
+      //testImage->writeToFile("test.png");
+      
+      /*
+      // Memory pixel printing
+      int counter = 1;
+      for(y = 0; y < 60; y++)
+	{
+	  for(x = 0; x < 80; x++)
+	    {
+	      // Printing pixels for memory
+	      int pixel = ((avg_red[x][y]/8) << 10) + ((avg_green[x][y]/8) << 5) + (avg_blue[x][y]/8);
+	      std::cout << std::setfill('0') << std::setw(4) << std::hex << pixel;
+	    }
+	    } */
+
+
+      // 2D boolean array printing
+      for(x = 0; x < 640; x++)
+	{
+	  std::cout << "{";
+	  for(y = 0; y < 480; y++)
+	    {
+	      int platform;
+	      if(isPlatform[x][y])
+		platform = 1;
+	      else
+		platform = 0;
+	      
+	      if(y == 479)
+		{
+		  std::cout << platform << "}," << std::endl;
+		} else
+		{
+		  std::cout << platform << ", ";
+		}
+	    }
+
+	}
+
+
+
+
+      
+    }  
 	
 	return 0;
 }
