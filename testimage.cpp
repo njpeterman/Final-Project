@@ -14,6 +14,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include "math.h"
 
 using namespace std;
 
@@ -33,7 +34,7 @@ int main()
 	delete myImage;*/
 
 
-  int numLevels = 1;
+  int numLevels = 2;
   for(int i = 0; i < numLevels; i++)
     {
       PNG * myImage = new PNG();
@@ -70,9 +71,9 @@ int main()
 		      b += (*myImage) (x_block, y_block)->blue;
 		    }
 		}
-	      r = (int) r / 64;
-	      g = (int) g / 64;
-	      b = (int) b / 64;
+	      r = (int) round(r / 64.);
+	      g = (int) round(g / 64.);
+	      b = (int) round(b / 64.);
 	      avg_red[x][y] = r;
 	      avg_green[x][y] = g;
 	      avg_blue[x][y] = b;
@@ -109,7 +110,7 @@ int main()
   
       //testImage->writeToFile("test.png");
       
-      /*
+      
       // Memory pixel printing
       int counter = 1;
       for(y = 0; y < 60; y++)
@@ -120,10 +121,10 @@ int main()
 	      int pixel = ((avg_red[x][y]/8) << 10) + ((avg_green[x][y]/8) << 5) + (avg_blue[x][y]/8);
 	      std::cout << std::setfill('0') << std::setw(4) << std::hex << pixel;
 	    }
-	    } */
+	} 
 
 
-      // 2D boolean array printing
+      /*   // 2D boolean array printing
       for(x = 0; x < 640; x++)
 	{
 	  std::cout << "{";
@@ -142,15 +143,15 @@ int main()
 		{
 		  std::cout << platform << ", ";
 		}
-	    }
+		} 
 
-	}
+		}*/
 
 
 
 
       
-    }  
+    }  // for(int i = 0; i < numLevels; i++)
 	
 	return 0;
 }
